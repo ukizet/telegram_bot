@@ -13,14 +13,11 @@ class FSMAdmin(StatesGroup):
     desc = State()
     price = State()
 
-# Початок діалога завантаження нового пункта(скоріше елемента) меню
+# Початок діалога завантаження нового елемента меню
 async def cm_start(message : types.Message):
+    print('cm_start')
     await FSMAdmin.photo.set()
     await message.answer('Give me photo(стискай зображення)')
-    pass
-
-async def return_admin_kb(message : types.Message):
-    await message.answer(reply_markup=admin_kb, text='admin')
 
 async def return_back_button(message : types.Message):
     await message.answer(reply_markup=client_kb, text='back')
@@ -77,16 +74,17 @@ def register_handlers_admin(dp : Dispatcher):
     Дати кожному хендлеру якийсь параметр, і зробити тут цикл фор який би перевіряв цей параметр, і потім цей цикл фор реєстрував би кожен хендлер, а всі ці стейти, командси, та контент тайпси
     можна зберігати в самих функціях і потім їх якось підтягувати в цикл при реєстрації
     """
-    dp.register_message_handler(cm_start, Text(equals='Завантажити піцу'), state=None)
-    dp.register_message_handler(return_admin_kb, Text(equals='Панель адміна'))
+
     dp.register_message_handler(return_back_button, Text(equals='Повернутися назад'))
     dp.register_message_handler(cancel_handler, state="*", commands='cancel')
+    
+    dp.register_message_handler(cm_start, Text(equals='Завантажити піцу'), state=None)
     dp.register_message_handler(load_photo, content_types=['photo'], state=FSMAdmin.photo)
     dp.register_message_handler(load_name, state=FSMAdmin.name)
     dp.register_message_handler(load_desc, state=FSMAdmin.desc)
     dp.register_message_handler(load_price, state=FSMAdmin.price)
     # dp.register_message_handler(cancel_handler, state=)
-    pass
+
 
 
 
