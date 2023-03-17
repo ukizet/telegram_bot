@@ -7,4 +7,5 @@ menu_button = KeyboardButton('Меню')
 
 client_kb = ReplyKeyboardMarkup(resize_keyboard=True)
 
-client_kb.add(start_button).insert(whenWeWork_button).add(admin_button).insert(menu_button)
+# client_kb.add(start_button).insert(whenWeWork_button).add(admin_button).insert(menu_button)
+client_kb.row(start_button, admin_button).row(whenWeWork_button, menu_button)
