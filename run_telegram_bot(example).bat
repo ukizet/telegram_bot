@@ -2,7 +2,7 @@
 
 set TOKEN=
 
-cd C:\folders\lp3\telegram_bot
+cd telegram_bot
 
 cd
 
