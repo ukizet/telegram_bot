@@ -1,10 +1,11 @@
+from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from create_bot import dp
 from database import sqlite_db
-from aiogram import types, Dispatcher
 from keyboards import admin_kb, client_kb
-from aiogram.dispatcher.filters import Text
+
 
 class FSMAdmin(StatesGroup):
     photo = State()
@@ -15,7 +16,7 @@ class FSMAdmin(StatesGroup):
 # Початок діалога завантаження нового пункта(скоріше елемента) меню
 async def cm_start(message : types.Message):
     await FSMAdmin.photo.set()
-    await message.answer('Give me photo')
+    await message.answer('Give me photo(стискай зображення)')
     pass
 
 async def return_admin_kb(message : types.Message):
