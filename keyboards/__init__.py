@@ -1,2 +1,2 @@
-from keyboards.client_kb import kb_client
-from keyboards.admin_kb import admin_keyb
+from keyboards.client_kb_f import client_kb
+from keyboards.admin_kb_f import admin_kb

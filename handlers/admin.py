@@ -3,7 +3,8 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from create_bot import dp
 from database import sqlite_db
 from aiogram import types, Dispatcher
-from keyboards import admin_keyb
+from keyboards import admin_kb, client_kb
+from aiogram.dispatcher.filters import Text
 
 class FSMAdmin(StatesGroup):
     photo = State()
@@ -11,14 +12,17 @@ class FSMAdmin(StatesGroup):
     desc = State()
     price = State()
 
-# Початок діалога завантаження нового пункта меню
+# Початок діалога завантаження нового пункта(скоріше елемента) меню
 async def cm_start(message : types.Message):
     await FSMAdmin.photo.set()
     await message.answer('Give me photo')
     pass
 
 async def return_admin_kb(message : types.Message):
-    await message.answer(reply_markup=admin_keyb, text='Admin kb')
+    await message.answer(reply_markup=admin_kb, text='admin')
+
+async def return_back_button(message : types.Message):
+    await message.answer(reply_markup=client_kb, text='back')
     
 # Функція відміни
 async def cancel_handler(message : types.Message, state : FSMContext):
@@ -72,8 +76,9 @@ def register_handlers_admin(dp : Dispatcher):
     Дати кожному хендлеру якийсь параметр, і зробити тут цикл фор який би перевіряв цей параметр, і потім цей цикл фор реєстрував би кожен хендлер, а всі ці стейти, командси, та контент тайпси
     можна зберігати в самих функціях і потім їх якось підтягувати в цикл при реєстрації
     """
-    dp.register_message_handler(cm_start, commands=['Upload_pizza'], state=None)
-    dp.register_message_handler(return_admin_kb, commands=['Admin'])
+    dp.register_message_handler(cm_start, Text(equals='Завантажити піцу'), state=None)
+    dp.register_message_handler(return_admin_kb, Text(equals='Панель адміна'))
+    dp.register_message_handler(return_back_button, Text(equals='Повернутися назад'))
     dp.register_message_handler(cancel_handler, state="*", commands='cancel')
     dp.register_message_handler(load_photo, content_types=['photo'], state=FSMAdmin.photo)
     dp.register_message_handler(load_name, state=FSMAdmin.name)
@@ -81,6 +86,21 @@ def register_handlers_admin(dp : Dispatcher):
     dp.register_message_handler(load_price, state=FSMAdmin.price)
     # dp.register_message_handler(cancel_handler, state=)
     pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 """
     # await FSMAdmin.name.set()

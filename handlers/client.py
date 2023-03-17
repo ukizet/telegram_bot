@@ -1,11 +1,12 @@
 from aiogram import types, Dispatcher
 from create_bot import dp
-from keyboards import kb_client
+from keyboards import client_kb
 from database import sqlite_db
+from aiogram.dispatcher.filters import Text
 
 # @dp.message_handler(commands=['start', 'help'])
 async def command_start(message : types.Message):
-    await message.answer('What do you want?', reply_markup=kb_client)
+    await message.answer('What do you want?', reply_markup=client_kb)
 
 # @dp.message_handler(commands=['WhenWeWork'])
 async def when_we_work_command(message : types.Message):
@@ -17,5 +18,6 @@ async def menu_command(message : types.Message):
 
 def register_handlers_client(dp : Dispatcher):
     dp.register_message_handler(command_start, commands=['start', 'help'])
-    dp.register_message_handler(when_we_work_command, commands=['WhenWeWork'])
-    dp.register_message_handler(menu_command, commands=['menu'])
+    dp.register_message_handler(command_start, Text(equals='Старт'))
+    dp.register_message_handler(when_we_work_command, Text(equals='Графік роботи'))
+    dp.register_message_handler(menu_command, Text(equals='Меню'))
