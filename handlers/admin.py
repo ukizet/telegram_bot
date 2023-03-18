@@ -2,9 +2,8 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from create_bot import dp
 from database import sqlite_db
-from keyboards import admin_kb, client_kb
+from keyboards import client_kb, download_pizza_kb
 
 
 class FSMAdmin(StatesGroup):
@@ -15,9 +14,8 @@ class FSMAdmin(StatesGroup):
 
 # Початок діалога завантаження нового елемента меню
 async def cm_start(message : types.Message):
-    print('cm_start')
     await FSMAdmin.photo.set()
-    await message.answer('Give me photo(стискай зображення)')
+    await message.answer('Give me photo(стискай зображення)', reply_markup=download_pizza_kb)
 
 async def return_back_button(message : types.Message):
     await message.answer(reply_markup=client_kb, text='back')
@@ -28,7 +26,7 @@ async def cancel_handler(message : types.Message, state : FSMContext):
     if current_state is None:
         return
     await state.finish()
-    await message.reply('OK')
+    await message.reply('OK', reply_markup=client_kb)
 
 # тут я спробую зробити шаблон всіх цих функцій, так як весь цей код не відповідає DRY
 async def load_template(message: types.Message, state: FSMContext, load_type: str, text: str='', finish: bool=False):
@@ -40,7 +38,7 @@ async def load_template(message: types.Message, state: FSMContext, load_type: st
             data[f'{load_type}'] = message.text
     if finish == True:
         async with state.proxy() as data:
-            await message.answer(str(data))
+            await message.answer(str(data), reply_markup=client_kb)
 
         await sqlite_db.sql_add(state=state)
         await state.finish()
@@ -74,16 +72,20 @@ def register_handlers_admin(dp : Dispatcher):
     Дати кожному хендлеру якийсь параметр, і зробити тут цикл фор який би перевіряв цей параметр, і потім цей цикл фор реєстрував би кожен хендлер, а всі ці стейти, командси, та контент тайпси
     можна зберігати в самих функціях і потім їх якось підтягувати в цикл при реєстрації
     """
+    def register_buttons():
+        dp.register_message_handler(cm_start, Text(equals='Завантажити піцу'), state=None)
+        dp.register_message_handler(return_back_button, Text(equals='Повернутися назад'))
+        dp.register_message_handler(cancel_handler, Text(equals='Відміна'), state="*")
 
-    dp.register_message_handler(return_back_button, Text(equals='Повернутися назад'))
-    dp.register_message_handler(cancel_handler, state="*", commands='cancel')
-    
-    dp.register_message_handler(cm_start, Text(equals='Завантажити піцу'), state=None)
-    dp.register_message_handler(load_photo, content_types=['photo'], state=FSMAdmin.photo)
-    dp.register_message_handler(load_name, state=FSMAdmin.name)
-    dp.register_message_handler(load_desc, state=FSMAdmin.desc)
-    dp.register_message_handler(load_price, state=FSMAdmin.price)
-    # dp.register_message_handler(cancel_handler, state=)
+    def register_cm_start_states():
+        dp.register_message_handler(load_photo, content_types=['photo'], state=FSMAdmin.photo)
+        dp.register_message_handler(load_name, state=FSMAdmin.name)
+        dp.register_message_handler(load_desc, state=FSMAdmin.desc)
+        dp.register_message_handler(load_price, state=FSMAdmin.price)
+        # dp.register_message_handler(cancel_handler, state=)
+
+    register_buttons()
+    register_cm_start_states()
 
 
 

@@ -11,4 +11,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 # admin_kb.row(upload_button, delete_button).row(back_button)
 
 admin_kb = ReplyKeyboardMarkup(resize_keyboard=True)\
-    .row(KeyboardButton('Завантажити піцу'), KeyboardButton('Видалити піцу')).row(KeyboardButton('Повернутися назад'))
+    .row(KeyboardButton('Завантажити піцу'), KeyboardButton('Видалити піцу'))\
+    .row(KeyboardButton('Повернутися назад'))
+
+download_pizza_kb = ReplyKeyboardMarkup(resize_keyboard=True).row(KeyboardButton('Відміна'))

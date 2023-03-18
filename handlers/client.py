@@ -40,13 +40,14 @@ async def return_admin_kb(message : types.Message):
     await message.answer(reply_markup=admin_kb, text='admin')
 
 def register_handlers_client(dp : Dispatcher):
-    dp.register_message_handler(command_start, commands=['start', 'help'])
-    dp.register_message_handler(command_start, Text(equals='Старт'))
-    dp.register_message_handler(return_admin_kb, Text(equals='Панель адміна'))
-    dp.register_message_handler(when_we_work_command, Text(equals='Графік роботи'))
-    dp.register_message_handler(menu_command, Text(equals='Меню'))
-    dp.register_message_handler(test, Text(equals='test'))
+    def register_buttons():
+        dp.register_message_handler(return_admin_kb, Text(equals='Панель адміна'))
+        dp.register_message_handler(when_we_work_command, Text(equals='Графік роботи'))
+        dp.register_message_handler(menu_command, Text(equals='Меню'))
     
+    register_buttons()
+    
+    dp.register_message_handler(test, Text(equals='test'))
     dp.register_callback_query_handler(lore_handler, text='lore')
     
     dp.register_message_handler(command_start)

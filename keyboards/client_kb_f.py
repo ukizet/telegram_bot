@@ -11,5 +11,5 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 # client_kb.row(start_button, admin_button).row(whenWeWork_button, menu_button)
 
 client_kb = ReplyKeyboardMarkup(resize_keyboard=True)\
-    .row(KeyboardButton('Старт'), KeyboardButton('Панель адміна'))\
+    .row(KeyboardButton('Панель адміна'))\
     .row(KeyboardButton('Графік роботи'), KeyboardButton('Меню'))
