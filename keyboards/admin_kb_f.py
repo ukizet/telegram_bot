@@ -14,4 +14,4 @@ admin_kb = ReplyKeyboardMarkup(resize_keyboard=True)\
     .row(KeyboardButton('Завантажити піцу'), KeyboardButton('Видалити піцу'))\
     .row(KeyboardButton('Повернутися назад'))
 
-download_pizza_kb = ReplyKeyboardMarkup(resize_keyboard=True).row(KeyboardButton('Відміна'))
+cancel_button = ReplyKeyboardMarkup(resize_keyboard=True).row(KeyboardButton('Відміна'))
