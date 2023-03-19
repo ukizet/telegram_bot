@@ -58,7 +58,7 @@ async def statements(func: str) -> function:
         # if get == 'state': return FSMAdmin.price
         await load_template(message=message, state=state, load_type='price', text='', finish=True)
 
-    return f'func'
+    return locals()[func]
 
 async def return_back_button(message : types.Message):
     await message.answer(reply_markup=client_kb, text='back')
