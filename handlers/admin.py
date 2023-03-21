@@ -43,6 +43,15 @@ async def load_template(message: types.Message, state: FSMContext, load_type: st
         await sqlite_db.sql_add(state=state)
         await state.finish()
     else:
+        """
+        ЦЕ ВСЕ НАЇОБ, Я ПРОСТО ДАУН ЯКИЙ НЕ ЗБЕРІГ ФАЙЛ ПІСЛЯ ЗМІН.
+
+        короче тільки що я протестував додавання нового елемента без 'await FSMAdmin.next()' і можу сказати що без нього все працює точно так як і раніше.
+        Тобто зараз в цьому 'await FSMAdmin.next()' нема ніякого сенсу. 
+        Але їбать, я не розумію чого воно працює, тобто як визиваються ці обробники станів якщо я при їх реєстрації просто передаю стан?
+
+        ЦЕ ВСЕ НАЇОБ, Я ПРОСТО ДАУН ЯКИЙ НЕ ЗБЕРІГ ФАЙЛ ПІСЛЯ ЗМІН.
+        """
         await FSMAdmin.next()
         if len(text) > 0:
             await message.answer(f'{text}')
