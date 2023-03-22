@@ -60,6 +60,7 @@ async def load_template(message: types.Message, state: FSMContext, load_type: st
 
 # Отримуємо першу відповідь від користувача та записуємо її в словник
 async def load_photo(message : types.Message, state : FSMContext):
+    # Крч треба спробувати тут відправляти те повідомлення від бота. По типу "завантажте фото"
     await load_template(message=message, state=state, load_type='photo', text='Give me name of the pizza')
 
 # Отримуємо другу відповідь від користувача 
