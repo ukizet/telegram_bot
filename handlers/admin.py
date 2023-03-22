@@ -23,7 +23,9 @@ async def return_back_button(message : types.Message):
 # Функція відміни
 async def cancel_handler(message : types.Message, state : FSMContext):
     current_state = await state.get_state()
+    print(f'current_state: {current_state}')
     if current_state is None:
+        # print(f'current_state: IS NONE!!!')
         return
     await state.finish()
     await message.reply('OK', reply_markup=client_kb)
@@ -61,7 +63,13 @@ async def load_template(message: types.Message, state: FSMContext, load_type: st
 # Отримуємо першу відповідь від користувача та записуємо її в словник
 async def load_photo(message : types.Message, state : FSMContext):
     # Крч треба спробувати тут відправляти те повідомлення від бота. По типу "завантажте фото"
-    await load_template(message=message, state=state, load_type='photo', text='Give me name of the pizza')
+    # await message.answer(f'Give me photo')
+    """
+    Не працює через те що цей обробник всього що відбувається в стані фото, 
+    не може вивести повідомлення перед тим як користувач відправить фото.
+    бо саме відправка фото я запускає цей обробник
+    """
+    await load_template(message=message, state=state, load_type='photo', text='Give me pizza name')
 
 # Отримуємо другу відповідь від користувача 
 async def load_name(message : types.Message, state : FSMContext):
