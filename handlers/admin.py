@@ -35,16 +35,17 @@ async def load_template(message: types.Message, state: FSMContext, load_type: st
     async def state_proxy_with_test():
         if test == True:
             return
-        return await state.proxy()
+        return await state.proxy
     
+    sproxy = await state_proxy_with_test()
     if load_type == 'photo':
-        async with state_proxy_with_test() as data:
+        async with sproxy() as data:
             data['photo'] = message.photo[0].file_id
     else:
-        async with state_proxy_with_test() as data:
+        async with sproxy() as data:
             data[f'{load_type}'] = message.text
     if finish == True:
-        async with state_proxy_with_test() as data:
+        async with sproxy() as data:
             await message.answer(str(data), reply_markup=client_kb)
 
         await sqlite_db.sql_add(state=state)
