@@ -31,15 +31,20 @@ async def cancel_handler(message : types.Message, state : FSMContext):
     await message.reply('OK', reply_markup=client_kb)
 
 # тут я спробую зробити шаблон всіх цих функцій, так як весь цей код не відповідає DRY
-async def load_template(message: types.Message, state: FSMContext, load_type: str, text: str='', finish: bool=False):
+async def load_template(message: types.Message, state: FSMContext, load_type: str, text: str='', finish: bool=False, test: bool=False):
+    async def state_proxy_with_test():
+        if test == True:
+            return
+        return await state.proxy()
+    
     if load_type == 'photo':
-        async with state.proxy() as data:
+        async with state_proxy_with_test() as data:
             data['photo'] = message.photo[0].file_id
     else:
-        async with state.proxy() as data:
+        async with state_proxy_with_test() as data:
             data[f'{load_type}'] = message.text
     if finish == True:
-        async with state.proxy() as data:
+        async with state_proxy_with_test() as data:
             await message.answer(str(data), reply_markup=client_kb)
 
         await sqlite_db.sql_add(state=state)
